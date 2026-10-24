@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace App\Service;
 class InvoiceCalculator
 {
-    public function __construct(private Discount $discount)
+    public function __construct(private DiscountInterface $discount)
     {}
     public function calculateInvoiceVat(array $lines):float
     {

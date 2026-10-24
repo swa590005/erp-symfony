@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Service;
 
-class StandardDiscount extends Discount
+class StandardDiscount implements DiscountInterface
 {
     public function apply(float $amount):float
     {
