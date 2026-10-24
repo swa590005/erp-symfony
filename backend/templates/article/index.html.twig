@@ -24,6 +24,12 @@
             <td> € {{ line.lineTotal|number_format(2, ',', '.') }}</td>
         </tr>
     {% endfor %}
+        <tr>
+            <td>Gross Total</td>
+            <td></td>
+            <td></td>
+            <td>€ {{ grossTotal|number_format(2, ',', '.') }}</td>
+        </tr>
     </table>
 </div>
 {% endblock %}
