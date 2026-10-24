@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Service;
 
-final class LineTotalCalculator
+final class LineTotalCalculator implements LineTotalCalculatorInterface
 {
     public function addLinesTotal( array $lines):array
     {

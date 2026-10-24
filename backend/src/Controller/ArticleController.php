@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\LineTotalCalculator;
+use App\Service\LineTotalCalculatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ArticleController extends AbstractController
 {
     #[Route('/article', name: 'app_article')]
-    public function index(LineTotalCalculator $lineTotalCalculator): Response
+    public function index(LineTotalCalculatorInterface $lineTotalCalculator): Response
     {
         $lines = [
             ['name' => 'Bolts',   'quantity' => 10, 'unitPrice' => 0.50],
