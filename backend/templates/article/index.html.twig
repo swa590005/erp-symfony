@@ -14,9 +14,15 @@
             <th>Name</th>
             <th>Quantity</th>
             <th>Unit Price</th>
+            <th>Total</th>
         </tr>
     {% for line in lines %}
-        <tr><td>{{ line.name }}</td><td>{{ line.quantity }}</td><td> € {{ line.unitPrice|number_format(2, ',', '.') }}</td></tr>
+        <tr>
+            <td>{{ line.name }}</td>
+            <td>{{ line.quantity }}</td>
+            <td> € {{ line.unitPrice|number_format(2, ',', '.') }}</td>
+            <td> € {{ line.lineTotal|number_format(2, ',', '.') }}</td>
+        </tr>
     {% endfor %}
     </table>
 </div>
