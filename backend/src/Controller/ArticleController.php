@@ -13,6 +13,11 @@ final class ArticleController extends AbstractController
     {
         return $this->render('article/index.html.twig', [
             'controller_name' => 'Article List',
+            'lines' => [
+                ['name' => 'Bolts',  'quantity' => 10, 'unitPrice' => 0.50],
+                ['quantity' => 20,'name' => 'Washers', 'unitPrice' => 0.10],
+                ['name' => 'Nuts', 'quantity' => 100, 'unitPrice' => 0.90]
+            ],
         ]);
     }
 }
