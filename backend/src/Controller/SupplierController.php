@@ -12,7 +12,7 @@ final class SupplierController extends AbstractController
     public function index(): Response
     {
         return $this->render('supplier/index.html.twig', [
-//            'controller_name' => 'SupplierController',
+            'controller_name' => 'SupplierController',
         ]);
     }
 }
