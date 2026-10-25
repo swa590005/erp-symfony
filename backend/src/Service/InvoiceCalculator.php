@@ -7,7 +7,7 @@ class InvoiceCalculator
     {}
     public function calculateInvoiceVat(array $lines):float
     {
-        return array_sum(array_map(fn($line)=>round(($this->discount->apply($line['unitPrice']*$line['quantity'])) * 1.19,2), $lines));
+        return array_sum(array_map(fn($line)=>round(($this->discount->apply($line['lineTotal'])) * 1.19,2), $lines));
     }
 
 }
