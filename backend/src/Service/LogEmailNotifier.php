@@ -4,8 +4,5 @@ namespace App\Service;
 
 class LogEmailNotifier implements EmailNotifier
 {
-    public function sendEmail(string $to, float $invoiceTotal):void
-    {
-
-    }
+    public function sendEmail(string $to, float $invoiceTotal):void{}
 }

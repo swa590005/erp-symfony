@@ -21,6 +21,10 @@ services:
     App\Service\LineTotalCalculatorInterface: '@App\Service\LineTotalCalculator'
     App\Service\DiscountInterface: '@App\Service\StandardDiscount'
     App\Service\EmailNotifier: '@App\Service\NewEmailService'
+    app.invoice_processor.preview:
+        class: App\Service\InvoiceProcessor
+        arguments:
+            $emailClass: '@App\Service\LogEmailNotifier'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
