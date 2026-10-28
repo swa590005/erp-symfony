@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace App\Controller;
 
-use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use App\Service\InvoiceCalculator;
 use App\Service\LineTotalCalculatorInterface;
@@ -15,20 +14,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class ArticleController extends AbstractController
 {
     #[Route('/article', name: 'app_article')]
-    public function index(LineTotalCalculatorInterface $lineTotalCalculator, InvoiceCalculator $invoiceCalculator): Response
+    public function index(ArticleRepository $articleRepository): Response
     {
-        $lines = [
-            ['name' => 'Bolts',   'quantity' => 10, 'unitPrice' => 0.50],
-            ['name' => 'Washers', 'quantity' => 20,   'unitPrice' => 0.10],
-            ['name' => 'Nuts', 'quantity' => 15, 'unitPrice' => 0.90],
-        ];
-        $linesTotal = $lineTotalCalculator->addLinesTotal($lines);
-        $grossTotal = $invoiceCalculator->calculateInvoiceVat($linesTotal);
-
+        $articles = $articleRepository->findAll();
         return $this->render('article/index.html.twig', [
             'controller_name' => 'Article List',
-            'lines' => $linesTotal,
-            'grossTotal' => $grossTotal
+            'articles' => $articles
         ]);
     }
 
@@ -46,7 +37,7 @@ final class ArticleController extends AbstractController
         $linesTotal = $roundedLineTotalCalculator->addLinesTotal($lines);
         $grossTotal = $invoiceCalculator->calculateInvoiceVat($linesTotal);
 
-        return $this->render('article/index.html.twig', [
+        return $this->render('article/budget.html.twig', [
             'controller_name' => 'Article Budget',
             'lines' => $linesTotal,
             'grossTotal' => $grossTotal
