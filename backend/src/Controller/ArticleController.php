@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace App\Controller;
 
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use App\Service\InvoiceCalculator;
 use App\Service\LineTotalCalculatorInterface;
 use App\Service\RoundedLineTotalCalculator;
@@ -49,5 +51,12 @@ final class ArticleController extends AbstractController
             'lines' => $linesTotal,
             'grossTotal' => $grossTotal
         ]);
+    }
+
+    #[Route('/article/show/{articleNumber}', name: 'app_article_show')]
+    public function show(string $articleNumber, ArticleRepository $articleRepository): Response
+    {
+        $article = $articleRepository->findOneByArticleNumber($articleNumber);
+        return new Response($article?->getName() ?? 'Article not found');
     }
 }
