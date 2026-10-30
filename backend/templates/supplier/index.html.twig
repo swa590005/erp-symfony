@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{#{% block title %}Hello SupplierController!{% endblock %}#}
+{% block title %}Hello {{ controller_name | default('ERP') }}{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,23 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/backend/src/Controller/SupplierController.php</code></li>
-        <li>Your template at <code>/var/www/backend/templates/supplier/index.html.twig</code></li>
-    </ul>
+    <table style="width: 100%; border: 1px solid #ccc" >
+        <tr style="background-color: #eee">
+            <th>Supplier Name</th>
+            <th>Supplier Number</th>
+            <th>Address</th>
+            <th>EmailAddress</th>
+            <th>Phone</th>
+        </tr>
+        {% for supplier in suppliers %}
+            <tr>
+                <td>{{ supplier.supplierName }}</td>
+                <td>{{ supplier.supplierNumber }}</td>
+                <td>{{ supplier.address }}</td>
+                <td>{{ supplier.emailAddress }}</td>
+                <td>{{ supplier.phoneNumber }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
