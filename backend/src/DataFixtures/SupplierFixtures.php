@@ -16,17 +16,21 @@ class SupplierFixtures extends Fixture
            ->setEmailAddress('sup1@erp.com')
            ->setAddress('First Street 123');
        $manager->persist($supplier);
+        $this->addReference('supplier-S-101', $supplier);
+
        $supplier = (new Supplier())->setSupplierName('Supplier2')
            ->setSupplierNumber('S-102')
            ->setEmailAddress('sup2@erp.com')
            ->setAddress('Second Street 234')
            ->setPhoneNumber('0123456789');
        $manager->persist($supplier);
+       $this->addReference('supplier-S-102', $supplier);
        $supplier = (new Supplier())->setSupplierName('Supplier3')
            ->setSupplierNumber('S-103')
            ->setEmailAddress('sup3@erp.com')
            ->setAddress('Third Street 345');
        $manager->persist($supplier);
+       $this->addReference('supplier-S-103', $supplier);
        $manager->flush();
     }
 }
