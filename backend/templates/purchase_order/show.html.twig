@@ -23,15 +23,24 @@
             <th>Article Number</th>
             <th>Quantity</th>
             <th>Unit Price</th>
+            <th>Total</th>
         </tr>
-        {% for line in purchaseOrder.orderLines %}
+        {% for line in totals.linesTotal %}
             <tr>
-                <td>{{ line.article.name }}</td>
-                <td>{{ line.article.articleNumber }}</td>
+                <td>{{ line.name }}</td>
+                <td>{{ line.articleNumber }}</td>
                 <td>{{ line.quantity }}</td>
                 <td> € {{ line.unitPrice|number_format(2, ',', '.') }}</td>
+                <td> € {{ line.lineTotal|number_format(2, ',', '.') }}</td>
             </tr>
         {% endfor %}
+        <tr>
+            <td>Gross Total</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>€ {{ totals.grossTotal|number_format(2, ',', '.') }}</td>
+        </tr>
     </table>
 </div>
 {% endblock %}
