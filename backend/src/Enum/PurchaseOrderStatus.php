@@ -8,4 +8,14 @@ enum PurchaseOrderStatus:string
     case Approved = 'approved';
     case Shipped = 'shipped';
     case Cancelled= 'cancelled';
+
+    public function canTransitionTo(self $status): bool
+    {
+        return match ($this) {
+            self::Pending => in_array($status, [self::Approved, self::Cancelled],true),
+            self::Approved => in_array($status, [self::Shipped, self::Cancelled],true),
+            self::Shipped => false,
+            self::Cancelled => false,
+        };
+    }
 }

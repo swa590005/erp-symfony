@@ -89,6 +89,13 @@ class PurchaseOrder
 
     public function setStatus(PurchaseOrderStatus $status): static
     {
+        if (!$this->status->canTransitionTo($status)) {
+            throw new \DomainException(sprintf(
+                'Cannot transition from %s to %s',
+                $this->status->value,
+                $status->value
+            ));
+        }
         $this->status = $status;
 
         return $this;
