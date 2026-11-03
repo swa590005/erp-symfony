@@ -9,7 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-
+    {% for message in app.flashes('success') %}
+        <p style="color: green">{{ message }}</p>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <p style="color: red">{{ message }}</p>
+    {% endfor %}
     <ul>
         <li>Order Number : {{ purchaseOrder.orderNumber }}</li>
         <li>Order Date : {{ purchaseOrder.orderDate |date("d.m.Y", false) }}</li>
@@ -17,6 +22,15 @@
         <li>Order Supplier Name : {{ purchaseOrder.supplier.supplierName }}</li>
         <li>Order Supplier Email : {{ purchaseOrder.supplier.emailAddress }}</li>
     </ul>
+    <form style="display: inline" method="post" action="{{ path('app_purchase_order_status', {orderNumber: purchaseOrder.orderNumber, status: 'approved'}) }}">
+        <button type="submit">Approve</button>
+    </form>
+    <form style="display: inline" method="post" action="{{ path('app_purchase_order_status', {orderNumber: purchaseOrder.orderNumber, status: 'shipped'}) }}">
+        <button type="submit">Ship</button>
+    </form>
+    <form style="display: inline" method="post" action="{{ path('app_purchase_order_status', {orderNumber: purchaseOrder.orderNumber, status: 'cancelled'}) }}">
+        <button type="submit">Cancel</button>
+    </form>
     <table style="width: 100%; border: 1px solid #ccc" >
         <tr style="background-color: #eee">
             <th>Article Name</th>
