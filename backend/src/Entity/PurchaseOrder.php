@@ -36,6 +36,9 @@ class PurchaseOrder
     #[ORM\OneToMany(targetEntity: PurchaseOrderLine::class, mappedBy: 'purchaseOrder', cascade: ['persist'], orphanRemoval: true)]
     private Collection $orderLines;
 
+    #[ORM\OneToOne(mappedBy: 'purchaseOrder', cascade: ['persist'])]
+    private ?Invoice $invoice = null;
+
     public function __construct()
     {
         $this->orderLines = new ArrayCollection();
@@ -127,6 +130,23 @@ class PurchaseOrder
                 $orderLine->setPurchaseOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): static
+    {
+        // set the owning side of the relation if necessary
+        if ($invoice->getPurchaseOrder() !== $this) {
+            $invoice->setPurchaseOrder($this);
+        }
+
+        $this->invoice = $invoice;
 
         return $this;
     }
