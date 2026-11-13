@@ -21,6 +21,7 @@ class PurchaseOrderCalculator
             ],
             $orderLines
         );
+        // lines array with extra col as linesTotal(price*unit)
         $linesTotal =$this->lineTotalCalculator->addLinesTotal($lines);
         $grossTotal= $this->invoiceCalculator->calculateInvoiceVat($linesTotal);
         return [
