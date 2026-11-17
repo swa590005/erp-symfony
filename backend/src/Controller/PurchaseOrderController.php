@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Enum\PurchaseOrderStatus;
 use App\Repository\PurchaseOrderRepository;
+use App\Service\InvoiceCreator;
 use App\Service\PurchaseOrderCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,6 +56,26 @@ final class PurchaseOrderController extends AbstractController
         } catch (\DomainException $e) {
             $this->addFlash('error', $e->getMessage());
         }
+        return $this->redirectToRoute('app_purchase_order_show', ['orderNumber' => $orderNumber]);
+    }
+
+    #[Route('/purchase-order/{orderNumber}/invoice', name: 'app_purchase_order_invoice', methods: ['POST'])]
+    public function createInvoice(
+        string $orderNumber,
+        InvoiceCreator $invoiceCreator,
+        PurchaseOrderRepository $purchaseOrderRepository): Response
+    {
+        $purchaseOrder = $purchaseOrderRepository->findOneByOrderNumber($orderNumber);
+        if ($purchaseOrder === null) {
+            throw $this->createNotFoundException('Purchase order not found');
+        }
+        try {
+            $invoiceCreator->createFromOrder($purchaseOrder);
+            $this->addFlash('success', 'Invoice Created successfully');
+        } catch (\DomainException $e) {
+            $this->addFlash('error', $e->getMessage());
+        }
+
         return $this->redirectToRoute('app_purchase_order_show', ['orderNumber' => $orderNumber]);
     }
 }
