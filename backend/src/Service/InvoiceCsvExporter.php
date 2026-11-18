@@ -13,15 +13,18 @@ class InvoiceCsvExporter
     public function export(array $invoices): string
     {
         $csv = implode(';', ['invoice number', 'date', 'supplier number', 'supplier name',
-            'net total', 'discount', 'VAT rate', 'VAT amount','gross total'])."\n";
+            'net total', 'discount', 'VAT rate', 'VAT amount','gross total','currency'])."\n";
         foreach ($invoices as $invoice) {
             $csv .= implode(';', [
                 $invoice->getInvoiceNumber(),
                 $invoice->getInvoiceDate()->format('Y-m-d'),
                 $invoice->getPurchaseOrder()->getSupplier()->getSupplierNumber(),
                 $invoice->getPurchaseOrder()->getSupplier()->getSupplierName(),
-                $invoice->getNetTotal(), $invoice->getDiscountAmount(), $invoice->getVATRate(), $invoice->getVATAmount(),
-               $invoice->getGrossTotal()
+                    number_format((float) $invoice->getNetTotal(), 2, ',', ''),
+                    number_format((float) $invoice->getDiscountAmount(), 2, ',', ''),
+                    number_format((float) $invoice->getVATRate(), 2, ',', ''),
+                    number_format((float) $invoice->getVATAmount(), 2, ',', ''),
+               number_format((float) $invoice->getGrossTotal(), 2, ',', ''),'EUR'
             ])."\n";
         }
         return $csv;
