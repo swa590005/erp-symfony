@@ -19,6 +19,11 @@
         <li>Order Number : {{ purchaseOrder.orderNumber }}</li>
         <li>Order Date : {{ purchaseOrder.orderDate |date("d.m.Y", false) }}</li>
         <li>Order Status : {{ purchaseOrder.status.value }}</li>
+        {% if purchaseOrder.invoice %}
+            <li>Order Invoice : {{ purchaseOrder.invoice.invoiceNumber }}</li>
+        {% else %}
+            <li>No Invoice yet</li>
+        {% endif %}
         <li>Order Supplier Name : {{ purchaseOrder.supplier.supplierName }}</li>
         <li>Order Supplier Email : {{ purchaseOrder.supplier.emailAddress }}</li>
     </ul>
@@ -30,6 +35,9 @@
     </form>
     <form style="display: inline" method="post" action="{{ path('app_purchase_order_status', {orderNumber: purchaseOrder.orderNumber, status: 'cancelled'}) }}">
         <button type="submit">Cancel</button>
+    </form>
+    <form style="display: inline" method="post" action="{{ path('app_purchase_order_invoice', {orderNumber: purchaseOrder.orderNumber }) }}">
+        <button type="submit">Create Invoice</button>
     </form>
     <table style="width: 100%; border: 1px solid #ccc" >
         <tr style="background-color: #eee">
