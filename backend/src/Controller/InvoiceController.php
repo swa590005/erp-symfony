@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace App\Controller;
 
+use App\Repository\InvoiceRepository;
+use App\Service\InvoiceCsvExporter;
 use App\Service\InvoiceProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -39,6 +41,17 @@ final class InvoiceController extends AbstractController
         return $this->render('invoice/index.html.twig', [
             'controller_name' => 'InvoiceController',
             'invoiceProcessed' => $processorOutput
+        ]);
+    }
+
+    #[Route('/invoice/download', name: 'app_invoice_download')]
+    public function downloadInvoiceCsv(InvoiceCsvExporter $invoiceCsvExporter, InvoiceRepository $invoiceRepository): Response
+    {
+        $invoices = $invoiceRepository->findAll();
+        $invoiceCsv = $invoiceCsvExporter->export($invoices);
+        return new Response($invoiceCsv, 200, [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="invoices.csv"',
         ]);
     }
 }
