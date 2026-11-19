@@ -8,7 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class InvoiceCreator
 {
-    public function __construct(private PurchaseOrderCalculator $calculator, private EntityManagerInterface $entityManager){}
+    public function __construct(private PurchaseOrderCalculator $calculator, private EntityManagerInterface $entityManager,
+    private EmailNotifier $emailNotifier){}
     public function createFromOrder(PurchaseOrder $order): Invoice
     {
         if(!$order->canBeInvoiced()){
@@ -28,6 +29,7 @@ class InvoiceCreator
         ->setDiscountAmount((string)$invoiceTotals['discountAmount']);
         $this->entityManager->persist($invoice);
         $this->entityManager->flush();
+        $this->emailNotifier->sendEmail($invoice->getPurchaseOrder()->getSupplier()->getEmailAddress(),((float)$invoice->getGrossTotal()), $invoice->getInvoiceNumber());
         return $invoice;
     }
 }
