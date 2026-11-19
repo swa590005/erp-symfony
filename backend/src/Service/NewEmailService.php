@@ -12,7 +12,7 @@ class NewEmailService implements EmailNotifier
         $email = (new Email())
             ->from('no-reply@localhost')
             ->to($to)
-            ->subject((sprintf('New Invoice is: %s ', $invoiceNumber)))
+            ->subject((sprintf('New Invoice: %s ', $invoiceNumber)))
             ->text('Gross Total: ' . number_format($invoiceTotal, 2, ',', '').'€');
 
         $this->mailer->send($email);
