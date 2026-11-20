@@ -44,6 +44,11 @@ final class ArticleController extends AbstractController
         ]);
     }
 
+    /**
+     * Shows the name of one article, found by its article number.
+     *
+     * Returns "Article not found" as plain text instead of a 404 page.
+     */
     #[Route('/article/show/{articleNumber}', name: 'app_article_show')]
     public function show(string $articleNumber, ArticleRepository $articleRepository): Response
     {
