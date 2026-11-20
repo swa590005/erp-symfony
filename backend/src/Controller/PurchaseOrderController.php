@@ -9,6 +9,7 @@ use App\Service\PurchaseOrderCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PurchaseOrderController extends AbstractController
@@ -21,6 +22,13 @@ final class PurchaseOrderController extends AbstractController
         ]);
     }
 
+    /**
+     * Shows one purchase order with its lines, line totals and gross total.
+     *
+     * Totals are calculated by PurchaseOrderCalculator, not stored.
+     *
+     * @throws NotFoundHttpException if no purchase order has this order number
+     */
     #[Route('/purchase-order/show/{orderNumber}', name: 'app_purchase_order_show')]
     public function show(
         string $orderNumber,
@@ -38,6 +46,16 @@ final class PurchaseOrderController extends AbstractController
             'totals' => $orderLines
         ]);
     }
+
+    /**
+     * Handles the "Approve", "ship", "cancel" button on the purchase order page.
+     *
+     * Changes the order status.
+     * PurchaseOrder::setStatus() checks whether the transition is allowed.
+     * Shows a success or error flash message and redirects back to the order page.
+     *
+     * @throws NotFoundHttpException if no purchase order has this order number
+     */
     #[Route('/purchase-order/{orderNumber}/status/{status}', name: 'app_purchase_order_status', methods: ['POST'])]
     public function changeStatus(
         string $orderNumber,
@@ -59,6 +77,14 @@ final class PurchaseOrderController extends AbstractController
         return $this->redirectToRoute('app_purchase_order_show', ['orderNumber' => $orderNumber]);
     }
 
+    /**
+     * Handles the "Create Invoice" button on the purchase order page.
+     *
+     * Delegates the work to InvoiceCreator. Shows a success or error flash
+     * message and redirects back to the order page.
+     *
+     * @throws NotFoundHttpException if no purchase order has this order number
+     */
     #[Route('/purchase-order/{orderNumber}/invoice', name: 'app_purchase_order_invoice', methods: ['POST'])]
     public function createInvoice(
         string $orderNumber,

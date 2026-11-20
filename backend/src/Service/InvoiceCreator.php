@@ -10,6 +10,15 @@ class InvoiceCreator
 {
     public function __construct(private PurchaseOrderCalculator $calculator, private EntityManagerInterface $entityManager,
     private EmailNotifier $emailNotifier){}
+
+    /**
+     * Creates an invoice for a purchase order.
+     *
+     * Only shipped orders without an existing invoice can be invoiced.
+     * The invoice is saved to the database, and the supplier gets an email.
+     *
+     * @throws \DomainException if the order is not shipped or already invoiced
+     */
     public function createFromOrder(PurchaseOrder $order): Invoice
     {
         if(!$order->canBeInvoiced()){

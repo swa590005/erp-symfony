@@ -8,6 +8,11 @@ use App\Entity\Invoice;
 class InvoiceCsvExporter
 {
     /**
+     * Builds a csv file with one row per invoice, for the accountant.
+     *
+     * Amounts use a decimal comma separator and no thousands separator, so German Excel
+     * reads them as numbers.
+     *
      * @param Invoice[] $invoices
      */
     public function export(array $invoices): string
