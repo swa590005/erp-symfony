@@ -23,6 +23,13 @@ final class ArticleController extends AbstractController
         ]);
     }
 
+    /**
+     * Shows a budget estimate for sample order lines, with each line total
+     * rounded up to whole euros.
+     *
+     * Uses #[Autowire] to get RoundedLineTotalCalculator instead of the default calculator
+     * from services.yaml. The lines are hard-coded demo data.
+     */
     #[Route('/article/budget', name: 'app_article_budget')]
     public function articleBudget(
         #[Autowire(service: RoundedLineTotalCalculator::class)]

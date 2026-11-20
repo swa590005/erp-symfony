@@ -12,6 +12,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class InvoiceController extends AbstractController
 {
+    /**
+     * Demo page from step 4: runs the old InvoiceProcessor on hard-coded lines
+     * and shows the gross total and the CSV. Will be removed in step 9.
+     */
     #[Route('/invoice', name: 'app_invoice')]
     public function index(InvoiceProcessor $invoiceProcessor): Response
     {
@@ -27,6 +31,10 @@ final class InvoiceController extends AbstractController
         ]);
     }
 
+    /**
+     * Same demo as index(), but uses the service app.invoice_processor.preview,
+     * which is wired with LogEmailNotifier, so no email is ever sent.
+     */
     #[Route('/invoice/preview', name: 'app_invoice_preview')]
     public function preview(
         #[Autowire(service: 'app.invoice_processor.preview')]
