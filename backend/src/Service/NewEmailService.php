@@ -4,6 +4,13 @@ namespace App\Service;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 
+
+/**
+ * Sends the invoice email with Symfony Mailer.
+ *
+ * In development MAILER_DSN=null://null discards the email.
+ * Check the Profiler's Emails panel to see what would have been sent.
+ */
 class NewEmailService implements EmailNotifier
 {
     public function __construct(private MailerInterface $mailer){}

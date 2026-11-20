@@ -9,6 +9,15 @@ class PurchaseOrderCalculator
 {
     public function __construct(private LineTotalCalculatorInterface $lineTotalCalculator, private InvoiceCalculator $invoiceCalculator){}
 
+    /**
+     * Adapter between Doctrine entities and the array-based calculators from step 4.
+     *
+     * Turns each PurchaseOrderLine into a plain array, then lets the calculators
+     * add line totals and invoice totals. Uses the unit price saved on each order
+     * line ($line->getUnitPrice()), not the article's current price.
+     *
+     * @return array{linesTotal: array, grossTotal: float, invoiceTotals: array}
+     */
     public function calculateOrderTotal(PurchaseOrder $purchaseOrder):array
     {
         $orderLines = $purchaseOrder->getOrderLines()->toArray();
