@@ -4,6 +4,9 @@ namespace App\Service;
 
 final class RoundedLineTotalCalculator implements LineTotalCalculatorInterface
 {
+    /**
+     * Line totals rounded up to whole euro, for budget estimates.
+     */
     public function addLinesTotal( array $lines):array
     {
         // Take each line, keep its data, and add lineTotal (quantity × unitPrice) into a new array

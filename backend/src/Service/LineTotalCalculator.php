@@ -4,6 +4,9 @@ namespace App\Service;
 
 final class LineTotalCalculator implements LineTotalCalculatorInterface
 {
+    /**
+     * Exact line totals. Default implementation (alias in services.yaml).
+     */
     public function addLinesTotal( array $lines):array
     {
         // Take each line, keep its data, and add lineTotal (quantity × unitPrice) into a new array

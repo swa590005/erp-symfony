@@ -42,7 +42,7 @@ final class ArticleController extends AbstractController
             ['name' => 'Nuts', 'quantity' => 15, 'unitPrice' => 0.90],
         ];
         $linesTotal = $roundedLineTotalCalculator->addLinesTotal($lines);
-        $grossTotal = $invoiceCalculator->calculateInvoiceVat($linesTotal);
+        $grossTotal = $invoiceCalculator->calculateGrossTotal($linesTotal);
 
         return $this->render('article/budget.html.twig', [
             'controller_name' => 'Article Budget',

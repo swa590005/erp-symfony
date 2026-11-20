@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace App\Service;
 
+/**
+ * 5% off every amount. Default discount (alias in services.yaml).
+ */
 class StandardDiscount implements DiscountInterface
 {
     public function apply(float $amount):float

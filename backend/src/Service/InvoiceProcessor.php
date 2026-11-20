@@ -15,7 +15,7 @@ class InvoiceProcessor
     {
         $output = [];
         $linesTotal = $this->lineTotalCalculator->addLinesTotal($lines);
-        $invoiceVatTotal = $this->invoiceCalculator->calculateInvoiceVat($linesTotal);
+        $invoiceVatTotal = $this->invoiceCalculator->calculateGrossTotal($linesTotal);
         $csv = $this->csvGenerator->generateCsv($lines);
         $this->saveData->saveData($lines);
         $this->emailClass->sendEmail($emailAddress, $invoiceVatTotal,'DEMO');
