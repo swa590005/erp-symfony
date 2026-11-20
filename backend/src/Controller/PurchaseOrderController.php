@@ -53,6 +53,8 @@ final class PurchaseOrderController extends AbstractController
      * Changes the order status.
      * PurchaseOrder::setStatus() checks whether the transition is allowed.
      * Shows a success or error flash message and redirects back to the order page.
+     *
+     * @throws NotFoundHttpException if no purchase order has this order number
      */
     #[Route('/purchase-order/{orderNumber}/status/{status}', name: 'app_purchase_order_status', methods: ['POST'])]
     public function changeStatus(
