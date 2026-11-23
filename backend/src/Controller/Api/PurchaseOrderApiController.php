@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Controller\Api;
 
+use App\Entity\PurchaseOrder;
 use App\Entity\PurchaseOrderLine;
 use App\Repository\PurchaseOrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +35,22 @@ final class PurchaseOrderApiController extends AbstractController
                 $purchaseOrder->getOrderLines()->toArray()
             ),
         ];
+        return $this->json($data);
+    }
+
+    #[Route('api/purchase-orders', name: 'app_api_purchase_order_list', methods: ['GET'])]
+    public function list(PurchaseOrderRepository $purchaseOrderRepository): JsonResponse
+    {
+        $data = array_map(
+            fn (PurchaseOrder $order) => [
+                'orderNumber' => $order->getOrderNumber(),
+                'supplierName' => $order->getSupplier()->getSupplierName(),
+                'supplierNumber' => $order->getSupplier()->getSupplierNumber(),
+                'orderDate' => $order->getOrderDate()->format('Y-m-d'),
+                'status' => $order->getStatus(),
+            ],
+            $purchaseOrderRepository->findAll()
+        );
         return $this->json($data);
     }
 }
