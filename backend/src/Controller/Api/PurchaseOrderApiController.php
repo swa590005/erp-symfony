@@ -2,11 +2,15 @@
 declare(strict_types=1);
 namespace App\Controller\Api;
 
+
 use App\Entity\PurchaseOrder;
 use App\Entity\PurchaseOrderLine;
+use App\Enum\PurchaseOrderStatus;
 use App\Repository\PurchaseOrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PurchaseOrderApiController extends AbstractController
@@ -52,5 +56,38 @@ final class PurchaseOrderApiController extends AbstractController
             $purchaseOrderRepository->findAll()
         );
         return $this->json($data);
+    }
+
+    #[Route('api/purchase-orders/{orderNumber}/status', name: 'app_api_purchase_order_status', methods: ['POST'])]
+    public function changeStatus(string $orderNumber,
+        Request $request,PurchaseOrderRepository $purchaseOrderRepository,
+        EntityManagerInterface $entityManager):JsonResponse
+    {
+
+        $purchaseOrder = $purchaseOrderRepository->findOneByOrderNumber($orderNumber);
+        if ($purchaseOrder === null) {
+            return $this->json(['error' => 'Purchase order not found'], 404);
+        }
+        $data = $request->toArray();
+        $statusText = $data['status'] ?? null;
+        if($statusText === null){
+            return $this->json(['error' => 'Status text cannot be empty'], 400);
+        }
+        $status = PurchaseOrderStatus::tryFrom($statusText);
+        if($status === null ){
+                return $this->json(['error' => 'Purchase order status not valid'], 422);
+        }
+
+        try {
+            $purchaseOrder->setStatus($status);
+            $entityManager->flush();
+            return $this->json([
+                'orderNumber' => $purchaseOrder->getOrderNumber(),
+                'status' => $purchaseOrder->getStatus(),
+            ], 200);
+        } catch (\DomainException $e) {
+            return $this->json(['error' => $e->getMessage()], 409);
+        }
+
     }
 }
