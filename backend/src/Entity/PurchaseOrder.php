@@ -150,9 +150,4 @@ class PurchaseOrder
 
         return $this;
     }
-
-    public function canBeInvoiced(): bool
-    {
-        return $this->status === PurchaseOrderStatus::Shipped && $this->invoice === null;
-    }
 }

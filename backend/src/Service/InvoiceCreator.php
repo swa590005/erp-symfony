@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Invoice;
 use App\Entity\PurchaseOrder;
+use App\Enum\PurchaseOrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 class InvoiceCreator
@@ -21,8 +22,11 @@ class InvoiceCreator
      */
     public function createFromOrder(PurchaseOrder $order): Invoice
     {
-        if(!$order->canBeInvoiced()){
-            throw new \DomainException(sprintf('Order %s cannot be invoiced', $order->getOrderNumber()));
+        if($order->getStatus() !== PurchaseOrderStatus::Shipped) {
+            throw new \DomainException(sprintf('Order %s is not shipped', $order->getOrderNumber()));
+        }
+        if($order->getInvoice() !== null) {
+            throw new \DomainException(sprintf('Order %s is already invoiced', $order->getOrderNumber()));
         }
 
         $invoice = new Invoice();
