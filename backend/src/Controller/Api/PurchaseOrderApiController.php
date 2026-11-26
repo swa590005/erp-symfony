@@ -6,7 +6,9 @@ namespace App\Controller\Api;
 use App\Entity\PurchaseOrder;
 use App\Entity\PurchaseOrderLine;
 use App\Enum\PurchaseOrderStatus;
+use App\Repository\InvoiceRepository;
 use App\Repository\PurchaseOrderRepository;
+use App\Service\InvoiceCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -88,6 +90,33 @@ final class PurchaseOrderApiController extends AbstractController
         } catch (\DomainException $e) {
             return $this->json(['error' => $e->getMessage()], 409);
         }
+    }
+    #[Route('/api/purchase-orders/{orderNumber}/invoice', name: 'app_api_purchase_order_invoice_api', methods: ['POST'])]
+    public function createInvoice(string $orderNumber,
+        InvoiceCreator $invoiceCreator,
+        PurchaseOrderRepository $purchaseOrderRepository): JsonResponse
+    {
+        $purchaseOrder = $purchaseOrderRepository->findOneByOrderNumber($orderNumber);
+        if ($purchaseOrder === null) {
+            return $this->json(['error' => 'Purchase order not found'], 404);
+        }
+        try {
+            $invoice = $invoiceCreator->createFromOrder($purchaseOrder);
+            $data = [
+                'orderNumber' => $invoice->getPurchaseOrder()->getOrderNumber(),
+                'invoiceNumber'=> $invoice->getinvoiceNumber(),
+                'invoiceDate' => $invoice->getinvoiceDate()->format('Y-m-d'),
+                'netTotal' =>(float) $invoice->getnetTotal(),
+                'grossTotal'=>(float) $invoice->getgrossTotal(),
+                'discountAmount' =>(float) $invoice->getdiscountAmount(),
+                'vatAmount' =>(float) $invoice->getvatAmount(),
+                'vatRate' =>(float) $invoice->getvatRate(),
+                'currency'=> 'EUR'
+            ];
+            return $this->json($data, 201);
 
+        } catch (\DomainException $e) {
+           return $this->json(['error' => $e->getMessage()], 409);
+        }
     }
 }
